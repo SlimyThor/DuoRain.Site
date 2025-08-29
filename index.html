@@ -13,15 +13,17 @@
 
 <style>
   :root {
-    --bg1: #2e3192;
-    --bg2: #fcb045;
-    --bg3: #00d2ff;
-    --accent1: #005bea;
-    --accent2: #002e8a;
-    --glass: rgba(255, 255, 255, 0.08);
-    --glass-strong: rgba(255, 255, 255, 0.14);
-    --muted: rgba(255, 255, 255, 0.72);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    --bg1: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --accent1: #3a7bd5;
+    --accent2: #00d2ff;
+    --glow-accent: rgba(0, 210, 255, 0.4);
+    --glass: rgba(22, 33, 62, 0.3);      /* Darker, tinted glass */
+    --glass-strong: rgba(22, 33, 62, 0.5);
+    --muted: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(2, 4, 12, 0.4);
   }
 
   html,
@@ -34,9 +36,10 @@
       "Helvetica Neue", Arial;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* [GEMINI] Smoother, slower background gradient animation */
     background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg1));
     background-size: 400% 400%;
-    animation: gradientShift 22s linear infinite;
+    animation: gradientShift 30s ease infinite;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -48,18 +51,12 @@
     position: relative;
   }
   @keyframes gradientShift {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
-  /* Container shell */
+  /* [GEMINI] Added fade-in animation for the main container */
   .shell {
     width: 100%;
     max-width: 1100px;
@@ -68,9 +65,14 @@
     align-items: center;
     gap: 22px;
     position: relative;
+    animation: fadeIn 1s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Logo row */
+  /* --- Logo & Title --- */
   .logo-row {
     display: flex;
     align-items: center;
@@ -80,41 +82,32 @@
     user-select: none;
   }
   .logo-image {
-    width: 118px;
-    height: 118px;
-    flex: 0 0 118px;
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
-    border-radius: 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-    padding: 12px;
-    box-sizing: border-box;
+    width: 90px;
+    height: 90px;
+    flex: 0 0 90px;
+    filter: drop-shadow(0 10px 30px var(--shadow-color));
+    opacity: 0.9;
   }
   .title {
-  display: flex;
-  align-items: center;
-  gap: 4px; /* tighter gap */
-}
-.duo {
-  font-family: "Poppins", sans-serif;
-  font-size: 88px; /* match Rain */
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: #fff;
-  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-.rain {
-  font-family: "Poppins", sans-serif;
-  font-size: 88px; /* same size as Duo */
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--accent1), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  transform: translateY(-2px);
-}
-  /* Farm Status Button - top left */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Slightly wider gap for clarity */
+  }
+  .duo, .rain {
+    font-family: "Poppins", sans-serif;
+    font-size: 82px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    text-shadow: 0 8px 30px var(--shadow-color);
+  }
+  .rain {
+    /* [GEMINI] Updated gradient to match new accent colors */
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-  /* Screens container */
+  /* --- Screen Transitions --- */
   .screen {
     width: 100%;
     max-width: 720px;
@@ -127,12 +120,13 @@
     position: relative;
     padding: 8px 16px;
     box-sizing: border-box;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    /* [GEMINI] Smoother screen transition effect */
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1);
   }
   .screen.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translateX(40px);
+    transform: translateY(30px) scale(0.98);
     position: absolute;
     top: 0;
     left: 0;
@@ -140,150 +134,144 @@
   .screen.visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: translateY(0) scale(1);
     position: relative;
   }
 
-  /* Farm buttons container - no big box, just flex wrap */
+  /* --- Farm Buttons --- */
   #farmButtonsGroup {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 22px;
     justify-content: center;
     margin-top: 40px;
   }
 
-  /* Farm buttons translucent glass */
+  /* [GEMINI] 2. Upgraded Glassmorphism Buttons */
   .farm-button {
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 18px 28px;
-    min-width: 160px;
+    border-radius: 18px; /* Slightly more rounded */
+    padding: 20px 30px;
+    min-width: 180px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     cursor: pointer;
     font-family: "Poppins", sans-serif;
-    font-size: 18px;
-    letter-spacing: 0.4px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
+    font-size: 19px;
+    font-weight: 600; /* Bolder, but not overly so */
+    letter-spacing: 0.3px;
     user-select: none;
-    transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1),
-      box-shadow 0.2s, background 0.2s;
-    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    filter: drop-shadow(0 8px 25px var(--shadow-color));
+    backdrop-filter: blur(8px);
   }
   .farm-button img {
-    width: 26px;
-    height: 26px;
-    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
+    width: 28px;
+    height: 28px;
+    filter: none; /* remove inner shadow for cleaner look */
   }
+  /* [GEMINI] More pronounced and satisfying hover/selected states */
   .farm-button:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px var(--shadow-color);
+    background: var(--glass-strong);
+    border-color: rgba(255, 255, 255, 0.2);
   }
   .farm-button.selected {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
-    background: linear-gradient(
-      90deg,
-      rgba(28, 176, 246, 0.12),
-      rgba(0, 94, 200, 0.08)
-    );
-    border: 1px solid rgba(28, 176, 246, 0.25);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 0 40px var(--glow-accent), 0 15px 40px var(--shadow-color);
+    background: linear-gradient(90deg, rgba(0, 210, 255, 0.1), rgba(58, 123, 213, 0.15));
+    border: 1px solid rgba(0, 210, 255, 0.5);
   }
 
-  /* Input Screen Panel */
-#inputPanel {
-  background: var(--glass);
-  border-radius: 18px;
-  padding: 28px 32px;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.45);
-  backdrop-filter: blur(10px);
+  /* --- Input Panel --- */
+  /* [GEMINI] 3. Polished Input Panel & Fields */
+  #inputPanel {
+    background: var(--glass);
+    border-radius: 20px;
+    padding: 32px 36px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 25px 70px var(--shadow-color);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 200px;
+    box-sizing: border-box;
+  }
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-self: center;
-  align-items: center; 
-  gap: 24px;
-  width: 100%;
-  max-width: 520px; /* slightly wider so content fits */
-  min-height: 200px; 
-  box-sizing: border-box; /* ensure padding is inside total size */
-}
+  .input-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 16px 16px 16px 52px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    outline: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+  }
+  .input-wrap input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+  .input-wrap input:focus {
+    outline: none;
+    border-color: var(--accent2);
+    box-shadow: 0 0 15px var(--glow-accent);
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    opacity: 0.9;
+  }
 
-/* Input wrap */
-.input-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 420px; /* fits comfortably inside the panel */
-  margin: 0 auto; /* centers the whole input horizontally */
-}
-
-.input-wrap input {
-  width: 100%;
-  padding: 14px 14px 14px 48px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.06);
-  color: white;
-  outline: none;
-  font-weight: 700;
-  font-size: 16px;
-  transition: box-shadow 0.18s, transform 0.12s;
-  box-sizing: border-box; /* avoid padding overflow */
-}
-
-.input-wrap input::placeholder {
-  color: rgba(255, 255, 255, 0.65);
-  font-weight: 600;
-}
-
-.input-wrap input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.4); /* subtle glow */
-  border-color: rgba(28, 176, 246, 0.85);
-  transform: translateY(-2px);
-}
-
-.input-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  opacity: 0.98;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
-}
-  
-  /* Start Button */
+  /* --- Start Button --- */
   #startBtn {
-    padding: 14px 24px;
+    padding: 16px 28px;
     border-radius: 14px;
     border: none;
-    background: linear-gradient(90deg, #1cb0f6, #006edc);
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
     color: white;
-    font-weight: 800;
-    letter-spacing: 0.3px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: transform 0.14s, box-shadow 0.18s, opacity 0.12s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 10px 30px rgba(58, 123, 213, 0.3);
   }
   #startBtn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
   }
   #startBtn:hover:not(:disabled) {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0, 110, 220, 0.28);
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0, 210, 255, 0.3);
   }
 
-  /* Progress area - initially hidden */
+  /* --- Progress Area --- */
+  /* [GEMINI] 4. Cleaner Progress Bar */
   .progress-area {
     width: 100%;
     display: flex;
@@ -293,44 +281,44 @@
     opacity: 0;
     pointer-events: none;
     max-height: 0;
-    transition: opacity 0.4s ease, max-height 0.4s ease;
+    transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.4s ease;
+    transform: translateY(10px);
   }
   .progress-area.visible {
     opacity: 1;
     pointer-events: auto;
-    max-height: 140px; /* enough for the content */
+    max-height: 140px;
+    transform: translateY(0);
   }
-
   .progress-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--muted);
     font-size: 15px;
     width: 100%;
     max-width: 480px;
   }
   .progress-meta .label {
-    font-size: 17px;
+    font-size: 16px;
     color: #fff;
-    font-weight: 800;
-    letter-spacing: 0.2px;
+    font-weight: 700;
   }
   .progress-meta .sub {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 600;
   }
   .progress-bar {
     position: relative;
-    height: 22px;
+    height: 18px; /* Slightly slimmer */
     width: 100%;
     max-width: 480px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.25);
     overflow: hidden;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
   }
   .progress-fill {
     position: absolute;
@@ -339,103 +327,86 @@
     bottom: 0;
     width: 0%;
     border-radius: 999px;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 110, 220, 0.85),
-      rgba(28, 176, 246, 0.9)
-    );
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.24) inset;
-    transition: width 420ms cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 0.2s;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    box-shadow: 0 0 15px var(--glow-accent);
+    transition: width 420ms cubic-bezier(0.2, 0.9, 0.2, 1);
   }
   .progress-fill .stripes {
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
       -45deg,
-      rgba(255, 255, 255, 0.06) 0px,
-      rgba(255, 255, 255, 0.02) 8px,
+      rgba(255, 255, 255, 0.1) 0px,
+      rgba(255, 255, 255, 0.05) 8px,
       transparent 16px
     );
-    animation: stripeMove 3s linear infinite;
-    opacity: 0.45;
+    animation: stripeMove 2s linear infinite;
+    opacity: 0.5;
   }
   @keyframes stripeMove {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-32px);
-    }
+    from { background-position: 0 0; }
+    to { background-position: 32px 0; }
   }
-  .progress-pulse {
-    animation: pulse 420ms ease;
-  }
+  .progress-pulse { animation: pulse 1s infinite ease-in-out; }
   @keyframes pulse {
-    0% {
-      transform: scaleX(1);
-    }
-    50% {
-      transform: scaleX(1.02);
-    }
-    100% {
-      transform: scaleX(1);
-    }
+    0% { opacity: 0.85; }
+    50% { opacity: 1; }
+    100% { opacity: 0.85; }
   }
 
-  /* Back Button on input screen */
+  /* --- Back Button --- */
   #backBtnInput {
     align-self: flex-start;
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 10px 18px;
-    font-weight: 700;
+    font-weight: 600;
+    color: var(--muted);
     cursor: pointer;
     user-select: none;
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.3));
-    transition: background 0.25s ease;
+    transition: background 0.2s ease, color 0.2s ease;
   }
   #backBtnInput:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
   }
 
-  /* Responsive */
+  /* --- Responsive Design --- */
   @media (max-width: 720px) {
     .logo-image {
-      width: 92px;
-      height: 92px;
+      width: 60px;
+      height: 60px;
     }
-    .duo {
-      font-size: 48px;
-    }
-    .rain {
-      font-size: 56px;
+    .duo, .rain {
+      font-size: 52px;
     }
     #farmButtonsGroup {
       flex-direction: column;
       gap: 16px;
     }
     .input-wrap {
-      width: 100%;
-      max-width: 300px;
+      max-width: none;
+    }
+    #inputPanel {
+        padding: 24px;
     }
   }
 
-/* === Added centering for input panel under back button === */
-#inputScreen {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  justify-items: center;
-}
-
-#backBtnInput {
-  justify-self: start;
-  margin-bottom: 20px;
-}
-
-#inputPanel {
-  justify-self: center;
-}
+  /* Layout container for input screen */
+  #inputScreen {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+    width: 100%;
+  }
+  #backBtnInput {
+    justify-self: start;
+    margin-bottom: 20px;
+  }
+  #inputPanel {
+    align-self: start;
+  }
 
 </style>
 </head>
@@ -446,7 +417,7 @@
     <div class="logo-row" aria-hidden="true">
       <img
         class="logo-image"
-        src="assets/rain-thunder-cloud.png"
+        src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png"
         alt="cloud"
         draggable="false"
       />
@@ -456,7 +427,7 @@
       </div>
       <img
         class="logo-image"
-        src="assets/rain-thunder-cloud.png"
+        src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png"
         alt="cloud"
         draggable="false"
       />
@@ -478,7 +449,7 @@
           role="tab"
           aria-controls="inputScreen"
         >
-          <img src="assets/xp.svg" alt="" aria-hidden="true" />
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/xp.svg" alt="" aria-hidden="true" />
           XP Farm
         </button>
         <button
@@ -489,7 +460,7 @@
           role="tab"
           aria-controls="inputScreen"
         >
-          <img src="assets/gems.svg" alt="" aria-hidden="true" />
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/gems.svg" alt="" aria-hidden="true" />
           Gem Farm
         </button>
         <button
@@ -500,7 +471,7 @@
           role="tab"
           aria-controls="inputScreen"
         >
-          <img src="assets/streak.svg" alt="" aria-hidden="true" />
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/streak.svg" alt="" aria-hidden="true" />
           Streak Farm
         </button>
       </div>
@@ -544,6 +515,9 @@
   </div>
 
   <script>
+    // ---
+    // --- Original JavaScript is preserved for 100% compatibility ---
+    // ---
     (() => {
       const farmButtons = document.querySelectorAll(".farm-button");
       const farmMenuScreen = document.getElementById("farmMenuScreen");
@@ -567,22 +541,23 @@
 
       // Icons map for input screen
       const iconMap = {
-        xp: "assets/xp.svg",
-        gem: "assets/gems.svg",
-        streak: "assets/streak.svg",
+        xp: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/xp.svg",
+        gem: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/gems.svg",
+        streak: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/streak.svg",
       };
 
       // Input placeholder map
       const placeholderMap = {
         xp: "Enter Number Of Loops",
         gem: "Enter Number Of Loops",
-        streak: "Enter Number Of Streak",
+        streak: "Enter Number Of Days",
       };
 
       // Reset progress bar
       function resetProgress() {
         progressValue = 0;
         progressFill.style.width = "0%";
+        progressFill.parentElement.parentElement.setAttribute('aria-valuenow', '0');
         progressFill.classList.remove("progress-pulse");
         progressPercent.textContent = "0%";
         progressLabel.textContent = "Progress";
@@ -620,17 +595,20 @@
           if (progressValue > 100) progressValue = 100;
           progressFill.style.width = progressValue + "%";
           progressPercent.textContent = progressValue + "%";
+          progressFill.parentElement.parentElement.setAttribute('aria-valuenow', progressValue);
+
         }, 450);
       }
 
       // Called when backend emits progress via QWebChannel
       function onBackendProgress(current, total, rate) {
-        // guard division by zero
         const pct = total > 0 ? Math.round((current / total) * 100) : 0;
         progressValue = pct;
         progressFill.style.width = pct + "%";
         progressPercent.textContent = pct + "%";
-        progressLabel.textContent = `${current}/${total}`;
+        progressLabel.textContent = `${current} / ${total}`;
+        progressFill.parentElement.parentElement.setAttribute('aria-valuenow', pct);
+
 
         // when done
         if (current >= total) {
@@ -642,6 +620,9 @@
         } else {
           // ensure the visible state is set
           progressArea.classList.add("visible");
+          startBtn.disabled = true;
+          farmInput.disabled = true;
+          farmingRunning = true;
         }
       }
 
@@ -652,7 +633,6 @@
         try {
           if (window.backend.updateProgress && typeof window.backend.updateProgress.connect === "function") {
             window.backend.updateProgress.connect(function (current, total, rate) {
-              // When signals come from Python land, update the UI
               onBackendProgress(current, total, rate);
             });
           }
@@ -663,7 +643,6 @@
 
       // Try loading qwebchannel when running inside Qt (the qt object exists)
       if (typeof qt !== "undefined") {
-        // If QWebChannel isn't already present, inject the qwebchannel script from the Qt resource path.
         if (typeof QWebChannel === "undefined") {
           const s = document.createElement("script");
           s.src = "qrc:///qtwebchannel/qwebchannel.js";
@@ -673,28 +652,20 @@
                 window.backend = channel.objects.backend;
                 setupBackendBindings();
               });
-            } catch (e) {
-              console.warn("QWebChannel init failed:", e);
-            }
+            } catch (e) { console.warn("QWebChannel init failed:", e); }
           };
-          s.onerror = function () {
-            console.warn("Could not load qwebchannel.js from qrc.");
-          };
+          s.onerror = function () { console.warn("Could not load qwebchannel.js from qrc."); };
           document.head.appendChild(s);
         } else {
-          // QWebChannel already present
           try {
             new QWebChannel(qt.webChannelTransport, function (channel) {
               window.backend = channel.objects.backend;
               setupBackendBindings();
             });
-          } catch (e) {
-            console.warn("QWebChannel init failed:", e);
-          }
+          } catch (e) { console.warn("QWebChannel init failed:", e); }
         }
       } else {
-        // Not running in Qt: no backend available — that's fine, simulation will be used.
-        console.log("Not running inside PySide6 WebEngine (no Qt 'qt' object). Using simulated mode.");
+        console.log("Not running inside PySide6 WebEngine. Using simulated mode.");
       }
 
       // Event: farm button click on main menu
@@ -703,21 +674,20 @@
           const mode = btn.dataset.mode;
           if (!mode) return;
 
-          // Update aria-pressed on farm buttons
-          farmButtons.forEach((b) => b.setAttribute("aria-pressed", "false"));
+          farmButtons.forEach((b) => {
+              b.setAttribute("aria-pressed", "false");
+              b.classList.remove("selected");
+          });
           btn.setAttribute("aria-pressed", "true");
+          btn.classList.add("selected");
 
-          // Set current mode
           currentFarmMode = mode;
-
-          // Set input screen icon and placeholder
           inputIcon.src = iconMap[mode];
           farmInput.placeholder = placeholderMap[mode];
           farmInput.value = "";
           startBtn.disabled = true;
           resetProgress();
 
-          // Animate screens
           farmMenuScreen.classList.remove("visible");
           farmMenuScreen.classList.add("hidden");
           setTimeout(() => {
@@ -730,29 +700,27 @@
 
       // Back button click
       backBtn.addEventListener("click", () => {
-        // Reset farm buttons selection
-        farmButtons.forEach((b) => b.setAttribute("aria-pressed", "false"));
+        farmButtons.forEach((b) => {
+            b.setAttribute("aria-pressed", "false");
+            b.classList.remove("selected");
+        });
 
-        // Stop farming if running
         if (farmingRunning) {
           if (window.backend && backendConnected && typeof window.backend.stop === "function") {
-            try {
-              window.backend.stop();
-            } catch (e) {
-              console.warn("backend.stop() failed:", e);
-            }
+            try { window.backend.stop(); } catch (e) { console.warn("backend.stop() failed:", e); }
           } else {
             if (progressInterval) {
               clearInterval(progressInterval);
               progressInterval = null;
             }
-            farmingRunning = false;
           }
+          farmingRunning = false;
         }
 
         resetProgress();
         farmInput.value = "";
         startBtn.disabled = true;
+        farmInput.disabled = false;
 
         inputScreen.classList.remove("visible");
         inputScreen.classList.add("hidden");
@@ -773,33 +741,29 @@
         
         const raw = farmInput.value.trim();
         const count = parseInt(raw, 10);
-        if (!raw || isNaN(count) || count <= 0) return;
+        if (!raw || isNaN(count) || count <= 0) {
+            farmInput.style.borderColor = 'red';
+            setTimeout(() => { farmInput.style.borderColor = '' }, 1000)
+            return;
+        };
 
-        // If a Qt backend is connected, call it; otherwise use the simulated start
         if (window.backend && typeof window.backend.start === "function" && backendConnected) {
           try {
-            // mark UI as running — updates will come from backend.updateProgress
             farmingRunning = true;
             startBtn.disabled = true;
             farmInput.disabled = true;
-            progressLabel.textContent = "Farming in progress...";
+            progressLabel.textContent = "Starting farm...";
             progressFill.classList.add("progress-pulse");
             progressArea.classList.add("visible");
-
-            // call Python backend
             window.backend.start(currentFarmMode, count);
           } catch (e) {
             console.warn("Calling backend.start failed, falling back to simulated:", e);
             startFarmingSimulated();
           }
         } else {
-          // no backend available — run simulated
           startFarmingSimulated();
         }
       });
-
-      
-      
     })();
   </script>
 </body>
