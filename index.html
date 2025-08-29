@@ -12,6 +12,12 @@
 />
 
 <style>
+  /* ---
+  --- UI Redesign by Gemini ---
+  --- All element IDs and JS hooks are preserved for full compatibility with DuoRainGUI.py ---
+  --- */
+
+  /* [GEMINI] 1. Refined Color Palette & Modern Theme */
   :root {
     --bg1: #1a1a2e;
     --bg2: #16213e;
@@ -160,10 +166,10 @@
     cursor: pointer;
     font-family: "Poppins", sans-serif;
     font-size: 19px;
-    font-weight: 600; /* Bolder, but not overly so */
+    font-weight: 700; /* Bolder font for neon effect */
     letter-spacing: 0.3px;
     user-select: none;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, text-shadow 0.25s ease;
     filter: drop-shadow(0 8px 25px var(--shadow-color));
     backdrop-filter: blur(8px);
   }
@@ -406,6 +412,26 @@
   }
   #inputPanel {
     align-self: start;
+  }
+
+  /* --- [GEMINI] Custom Neon Button Text Colors --- */
+  
+  /* XP Farm Button: Neon Yellow */
+  #xpBtn {
+    color: #f1fa8c; /* A slightly softer neon yellow for readability */
+    text-shadow: 0 0 4px #f1fa8c, 0 0 8px rgba(241, 250, 140, 0.5);
+  }
+
+  /* Gem Farm Button: Neon Cyan */
+  #gemBtn {
+    color: #8be9fd; /* A slightly softer neon cyan */
+    text-shadow: 0 0 4px #8be9fd, 0 0 8px rgba(139, 233, 253, 0.5);
+  }
+
+  /* Streak Farm Button: Neon Orange */
+  #streakBtn {
+    color: #ffb86c; /* A slightly softer neon orange */
+    text-shadow: 0 0 4px #ffb86c, 0 0 8px rgba(255, 184, 108, 0.5);
   }
 
 </style>
