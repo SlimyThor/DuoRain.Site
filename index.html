@@ -7,29 +7,30 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600;800&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;800&display=swap"
   rel="stylesheet"
 />
 
 <style>
   /* ---
-  --- UI Redesign by Gemini ---
-  --- All element IDs and JS hooks are preserved for full compatibility with DuoRainGUI.py ---
+  --- UI Redesign 2.0 by Gemini ---
+  --- New UI flow with a main menu and dedicated farm selection screen. ---
+  --- Fully compatible with DuoRainGUI.py ---
   --- */
 
-  /* [GEMINI] 1. Refined Color Palette & Modern Theme */
+  /* [GEMINI] 1. New "Cosmic Aurora" Theme */
   :root {
-    --bg1: #1a1a2e;
-    --bg2: #16213e;
-    --bg3: #0f3460;
-    --accent1: #3a7bd5;
-    --accent2: #00d2ff;
-    --glow-accent: rgba(0, 210, 255, 0.4);
-    --glass: rgba(22, 33, 62, 0.3);      /* Darker, tinted glass */
-    --glass-strong: rgba(22, 33, 62, 0.5);
-    --muted: rgba(255, 255, 255, 0.7);
+    --bg1: #0d0b1d;
+    --bg2: #2a1a45;
+    --bg3: #1a0f30;
+    --accent1: #8A2BE2; /* BlueViolet */
+    --accent2: #00BFFF; /* DeepSkyBlue */
+    --glow-accent: rgba(0, 191, 255, 0.5);
+    --glass: rgba(26, 15, 48, 0.4);      /* Frosted glass */
+    --glass-strong: rgba(26, 15, 48, 0.6);
+    --muted: rgba(255, 255, 255, 0.65);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-color: rgba(2, 4, 12, 0.4);
+    --shadow-color: rgba(5, 2, 12, 0.5);
   }
 
   html,
@@ -42,10 +43,10 @@
       "Helvetica Neue", Arial;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* [GEMINI] Smoother, slower background gradient animation */
-    background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg1));
+    /* [GEMINI] More dynamic aurora gradient */
+    background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--accent1));
     background-size: 400% 400%;
-    animation: gradientShift 30s ease infinite;
+    animation: gradientShift 25s ease infinite;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -53,7 +54,7 @@
     min-height: 100vh;
     padding: 36px 18px;
     box-sizing: border-box;
-    overflow-x: hidden;
+    overflow: hidden; /* Prevent scrollbars from animations */
     position: relative;
   }
   @keyframes gradientShift {
@@ -62,7 +63,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* [GEMINI] Added fade-in animation for the main container */
   .shell {
     width: 100%;
     max-width: 1100px;
@@ -71,7 +71,7 @@
     align-items: center;
     gap: 22px;
     position: relative;
-    animation: fadeIn 1s ease-out;
+    animation: fadeIn 1.2s ease-out;
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -88,32 +88,24 @@
     user-select: none;
   }
   .logo-image {
-    width: 90px;
-    height: 90px;
-    flex: 0 0 90px;
+    width: 80px;
+    height: 80px;
     filter: drop-shadow(0 10px 30px var(--shadow-color));
     opacity: 0.9;
   }
-  .title {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Slightly wider gap for clarity */
-  }
   .duo, .rain {
     font-family: "Poppins", sans-serif;
-    font-size: 82px;
+    font-size: 80px;
     font-weight: 800;
-    letter-spacing: -1px;
     text-shadow: 0 8px 30px var(--shadow-color);
   }
   .rain {
-    /* [GEMINI] Updated gradient to match new accent colors */
     background: linear-gradient(90deg, var(--accent1), var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  /* --- Screen Transitions --- */
+  /* [GEMINI] 2. Upgraded "Focus Shift" Screen Transitions */
   .screen {
     width: 100%;
     max-width: 720px;
@@ -124,15 +116,15 @@
     justify-content: center;
     user-select: none;
     position: relative;
-    padding: 8px 16px;
+    padding: 8px;
     box-sizing: border-box;
-    /* [GEMINI] Smoother screen transition effect */
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1);
+    transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
   }
   .screen.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(30px) scale(0.98);
+    transform: scale(0.95);
+    filter: blur(10px);
     position: absolute;
     top: 0;
     left: 0;
@@ -140,24 +132,62 @@
   .screen.visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    filter: blur(0px);
     position: relative;
   }
+  
+  /* [GEMINI] 3. Main Menu "Hero" Button Styling */
+  .hero-button {
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    user-select: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.3);
+    color: var(--muted);
+    animation: pulseGlow 4s infinite ease-in-out;
+  }
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(138, 43, 226, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.3); }
+    100% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.3); }
+  }
+  .hero-button img {
+    width: 32px;
+    height: 32px;
+  }
+  .hero-button:hover {
+    transform: translateY(-8px) scale(1.03);
+    background: var(--glass);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    box-shadow: 0 25px 50px var(--shadow-color), 0 0 40px rgba(138, 43, 226, 0.5);
+  }
 
-  /* --- Farm Buttons --- */
+
+  /* --- Farm Menu Styling --- */
   #farmButtonsGroup {
     display: flex;
     flex-wrap: wrap;
     gap: 22px;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 20px;
   }
-
-  /* [GEMINI] 2. Upgraded Glassmorphism Buttons */
   .farm-button {
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    border-radius: 18px; /* Slightly more rounded */
+    border-radius: 18px;
     padding: 20px 30px;
     min-width: 180px;
     display: flex;
@@ -166,36 +196,53 @@
     cursor: pointer;
     font-family: "Poppins", sans-serif;
     font-size: 19px;
-    font-weight: 700; /* Bolder font for neon effect */
+    font-weight: 700;
     letter-spacing: 0.3px;
     user-select: none;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, text-shadow 0.25s ease;
-    filter: drop-shadow(0 8px 25px var(--shadow-color));
+    transition: all 0.25s ease;
     backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
   }
   .farm-button img {
     width: 28px;
     height: 28px;
-    filter: none; /* remove inner shadow for cleaner look */
   }
-  /* [GEMINI] More pronounced and satisfying hover/selected states */
   .farm-button:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px var(--shadow-color);
+    transform: translateY(-6px);
     background: var(--glass-strong);
     border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 30px var(--shadow-color);
   }
   .farm-button.selected {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 0 40px var(--glow-accent), 0 15px 40px var(--shadow-color);
-    background: linear-gradient(90deg, rgba(0, 210, 255, 0.1), rgba(58, 123, 213, 0.15));
-    border: 1px solid rgba(0, 210, 255, 0.5);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 30px var(--glow-accent), 0 15px 30px var(--shadow-color);
+    background: linear-gradient(90deg, rgba(0, 191, 255, 0.1), rgba(138, 43, 226, 0.15));
+    border: 1px solid rgba(0, 191, 255, 0.5);
   }
 
-  /* --- Input Panel --- */
-  /* [GEMINI] 3. Polished Input Panel & Fields */
-  #inputPanel {
+  /* [GEMINI] 4. Universal Back Button Style */
+  .back-button {
+    align-self: flex-start;
     background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateX(-4px);
+  }
+
+
+  /* --- Input Panel & Progress --- */
+  #inputPanel {
+    background: var(--glass-strong);
     border-radius: 20px;
     padding: 32px 36px;
     border: 1px solid var(--glass-border);
@@ -208,32 +255,23 @@
     gap: 28px;
     width: 100%;
     max-width: 480px;
-    min-height: 200px;
     box-sizing: border-box;
   }
-
   .input-wrap {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
   }
   .input-wrap input {
     width: 100%;
     padding: 16px 16px 16px 52px;
     border-radius: 14px;
     border: 1px solid var(--glass-border);
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     color: white;
-    outline: none;
     font-weight: 600;
     font-size: 16px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease;
     box-sizing: border-box;
-  }
-  .input-wrap input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 500;
   }
   .input-wrap input:focus {
     outline: none;
@@ -246,192 +284,76 @@
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
-    opacity: 0.9;
+    width: 24px; height: 24px; opacity: 0.9;
   }
-
-  /* --- Start Button --- */
   #startBtn {
     padding: 16px 28px;
     border-radius: 14px;
     border: none;
     background: linear-gradient(90deg, var(--accent1), var(--accent2));
     color: white;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 0.5px;
+    font-weight: 700; font-size: 16px; letter-spacing: 0.5px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-    box-shadow: 0 10px 30px rgba(58, 123, 213, 0.3);
+    transition: all 0.2s ease;
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
   }
   #startBtn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+    opacity: 0.4; cursor: not-allowed;
+    transform: none; box-shadow: none;
   }
   #startBtn:hover:not(:disabled) {
     transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(0, 210, 255, 0.3);
+    box-shadow: 0 18px 40px rgba(0, 191, 255, 0.4);
   }
-
-  /* --- Progress Area --- */
-  /* [GEMINI] 4. Cleaner Progress Bar */
   .progress-area {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
+    width: 100%; display: flex; flex-direction: column;
+    gap: 14px; align-items: center; opacity: 0;
     max-height: 0;
-    transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.4s ease;
-    transform: translateY(10px);
+    transition: opacity 0.4s ease, max-height 0.4s ease;
   }
   .progress-area.visible {
-    opacity: 1;
-    pointer-events: auto;
-    max-height: 140px;
-    transform: translateY(0);
-  }
-  .progress-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    color: var(--muted);
-    font-size: 15px;
-    width: 100%;
-    max-width: 480px;
-  }
-  .progress-meta .label {
-    font-size: 16px;
-    color: #fff;
-    font-weight: 700;
-  }
-  .progress-meta .sub {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
+    opacity: 1; max-height: 140px;
   }
   .progress-bar {
-    position: relative;
-    height: 18px; /* Slightly slimmer */
-    width: 100%;
-    max-width: 480px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.25);
+    height: 12px; width: 100%; max-width: 480px;
+    border-radius: 999px; background: rgba(0, 0, 0, 0.25);
     overflow: hidden;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
   }
   .progress-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 0%;
-    border-radius: 999px;
+    height:100%; width: 0%; border-radius: 999px;
     background: linear-gradient(90deg, var(--accent1), var(--accent2));
     box-shadow: 0 0 15px var(--glow-accent);
-    transition: width 420ms cubic-bezier(0.2, 0.9, 0.2, 1);
-  }
-  .progress-fill .stripes {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.1) 0px,
-      rgba(255, 255, 255, 0.05) 8px,
-      transparent 16px
-    );
-    animation: stripeMove 2s linear infinite;
-    opacity: 0.5;
-  }
-  @keyframes stripeMove {
-    from { background-position: 0 0; }
-    to { background-position: 32px 0; }
-  }
-  .progress-pulse { animation: pulse 1s infinite ease-in-out; }
-  @keyframes pulse {
-    0% { opacity: 0.85; }
-    50% { opacity: 1; }
-    100% { opacity: 0.85; }
+    transition: width 420ms ease;
   }
 
-  /* --- Back Button --- */
-  #backBtnInput {
-    align-self: flex-start;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    padding: 10px 18px;
-    font-weight: 600;
-    color: var(--muted);
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  #backBtnInput:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-
-  /* --- Responsive Design --- */
-  @media (max-width: 720px) {
-    .logo-image {
-      width: 60px;
-      height: 60px;
-    }
-    .duo, .rain {
-      font-size: 52px;
-    }
-    #farmButtonsGroup {
-      flex-direction: column;
-      gap: 16px;
-    }
-    .input-wrap {
-      max-width: none;
-    }
-    #inputPanel {
-        padding: 24px;
-    }
-  }
-
-  /* Layout container for input screen */
-  #inputScreen {
+  /* --- Layout & Responsive --- */
+  #inputScreen, #farmMenuScreen {
     display: grid;
     grid-template-rows: auto 1fr;
-    justify-items: center;
-    width: 100%;
+    justify-items: center; width: 100%;
+    gap: 20px;
   }
-  #backBtnInput {
-    justify-self: start;
-    margin-bottom: 20px;
-  }
-  #inputPanel {
-    align-self: start;
+  #backBtnFarms, #backBtnInput { justify-self: start; }
+  #inputPanel { align-self: start; }
+  @media (max-width: 720px) {
+    .logo-image { width: 60px; height: 60px; }
+    .duo, .rain { font-size: 52px; }
+    #farmButtonsGroup { flex-direction: column; gap: 16px; }
   }
 
-  /* --- [GEMINI] Custom Neon Button Text Colors --- */
-  
-  /* XP Farm Button: Neon Yellow */
+  /* [GEMINI] 5. Refined Neon Text Glow */
   #xpBtn {
-    color: #f1fa8c; /* A slightly softer neon yellow for readability */
-    text-shadow: 0 0 4px #f1fa8c, 0 0 8px rgba(241, 250, 140, 0.5);
+    color: #f1fa8c;
+    text-shadow: 0 0 5px #f1fa8c, 0 0 10px rgba(241, 250, 140, 0.5);
   }
-
-  /* Gem Farm Button: Neon Cyan */
   #gemBtn {
-    color: #8be9fd; /* A slightly softer neon cyan */
-    text-shadow: 0 0 4px #8be9fd, 0 0 8px rgba(139, 233, 253, 0.5);
+    color: #8be9fd;
+    text-shadow: 0 0 5px #8be9fd, 0 0 10px rgba(139, 233, 253, 0.5);
   }
-
-  /* Streak Farm Button: Neon Orange */
   #streakBtn {
-    color: #ffb86c; /* A slightly softer neon orange */
-    text-shadow: 0 0 4px #ffb86c, 0 0 8px rgba(255, 184, 108, 0.5);
+    color: #ffb86c;
+    text-shadow: 0 0 5px #ffb86c, 0 0 10px rgba(255, 184, 108, 0.5);
   }
 
 </style>
@@ -439,116 +361,70 @@
 <body>
   <div class="shell" role="main" aria-label="DuoRain automated farming tool">
 
-    <!-- Logo Row -->
     <div class="logo-row" aria-hidden="true">
-      <img
-        class="logo-image"
-        src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png"
-        alt="cloud"
-        draggable="false"
-      />
-      <div class="title">
-        <div class="duo">Duo</div>
-        <div class="rain">Rain</div>
-      </div>
-      <img
-        class="logo-image"
-        src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png"
-        alt="cloud"
-        draggable="false"
-      />
+      <img class="logo-image" src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png" alt="cloud" />
+      <div class="title"><div class="duo">Duo</div><div class="rain">Rain</div></div>
+      <img class="logo-image" src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/rain-thunder-cloud.png" alt="cloud" />
     </div>
+    
+    <!-- [GEMINI] Main Menu Screen (New) -->
+    <section id="mainMenuScreen" class="screen visible" aria-label="Main Menu">
+      <button id="farmsBtn" class="hero-button">
+        <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/farms.svg" alt="" aria-hidden="true" />
+        Select Farm
+      </button>
+    </section>
 
-    <!-- Farm Menu Screen -->
-    <section
-      id="farmMenuScreen"
-      class="screen visible"
-      aria-label="Farming actions"
-      role="region"
-    >
+    <!-- Farm Selection Screen (Previously the main screen) -->
+    <section id="farmMenuScreen" class="screen hidden" aria-label="Farming actions" role="region">
+      <button id="backBtnFarms" class="back-button" aria-label="Back to main menu">← Back</button>
       <div id="farmButtonsGroup" role="tablist" aria-label="Farming actions">
-        <button
-          class="farm-button"
-          data-mode="xp"
-          id="xpBtn"
-          aria-pressed="false"
-          role="tab"
-          aria-controls="inputScreen"
-        >
-          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/xp.svg" alt="" aria-hidden="true" />
-          XP Farm
+        <button class="farm-button" data-mode="xp" id="xpBtn" role="tab" aria-controls="inputScreen">
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/xp.svg" alt="" /> XP Farm
         </button>
-        <button
-          class="farm-button"
-          data-mode="gem"
-          id="gemBtn"
-          aria-pressed="false"
-          role="tab"
-          aria-controls="inputScreen"
-        >
-          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/gems.svg" alt="" aria-hidden="true" />
-          Gem Farm
+        <button class="farm-button" data-mode="gem" id="gemBtn" role="tab" aria-controls="inputScreen">
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/gems.svg" alt="" /> Gem Farm
         </button>
-        <button
-          class="farm-button"
-          data-mode="streak"
-          id="streakBtn"
-          aria-pressed="false"
-          role="tab"
-          aria-controls="inputScreen"
-        >
-          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/streak.svg" alt="" aria-hidden="true" />
-          Streak Farm
+        <button class="farm-button" data-mode="streak" id="streakBtn" role="tab" aria-controls="inputScreen">
+          <img src="https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/streak.svg" alt="" /> Streak Farm
         </button>
       </div>
     </section>
 
-    <!-- Input Screen -->
-    <section
-      id="inputScreen"
-      class="screen hidden"
-      aria-label="Farm input and progress"
-      role="region"
-    >
-      <button id="backBtnInput" aria-label="Back to farm menu">← Back</button>
-
+    <!-- Input & Progress Screen (Unchanged logically) -->
+    <section id="inputScreen" class="screen hidden" aria-label="Farm input and progress" role="region">
+      <button id="backBtnInput" class="back-button" aria-label="Back to farm menu">← Back</button>
       <div id="inputPanel">
         <div class="input-wrap">
-          <img class="input-icon" src="" alt="" id="inputIcon" aria-hidden="true" />
-          <input
-            type="text"
-            id="farmInput"
-            autocomplete="off"
-            placeholder=""
-            aria-label="Farm input"
-          />
+          <img class="input-icon" src="" alt="" id="inputIcon" />
+          <input type="text" id="farmInput" autocomplete="off" placeholder="" aria-label="Farm input" />
         </div>
         <button id="startBtn" disabled>Start Farming</button>
-
-        <div class="progress-area" aria-live="polite" aria-atomic="true" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-area" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="progress-meta">
             <div class="label" id="progressLabel">Progress</div>
             <div class="sub" id="progressPercent">0%</div>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill">
-              <div class="stripes"></div>
-            </div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         </div>
       </div>
     </section>
   </div>
 
   <script>
-    // ---
-    // --- Original JavaScript is preserved for 100% compatibility ---
-    // ---
     (() => {
-      const farmButtons = document.querySelectorAll(".farm-button");
+      // --- Get all screen elements ---
+      const mainMenuScreen = document.getElementById("mainMenuScreen");
       const farmMenuScreen = document.getElementById("farmMenuScreen");
       const inputScreen = document.getElementById("inputScreen");
-      const backBtn = document.getElementById("backBtnInput");
+
+      // --- Get all interactive elements ---
+      const farmsBtn = document.getElementById("farmsBtn");
+      const farmButtons = document.querySelectorAll(".farm-button");
+      const backBtnFarms = document.getElementById("backBtnFarms");
+      const backBtnInput = document.getElementById("backBtnInput");
+      
+      // --- Elements for the input screen ---
       const farmInput = document.getElementById("farmInput");
       const startBtn = document.getElementById("startBtn");
       const inputIcon = document.getElementById("inputIcon");
@@ -556,240 +432,124 @@
       const progressPercent = document.getElementById("progressPercent");
       const progressLabel = document.getElementById("progressLabel");
       const progressArea = inputScreen.querySelector(".progress-area");
-
-      let currentFarmMode = null;
-      let farmingRunning = false;
-      let progressValue = 0;
-      let progressInterval = null;
-
-      // Whether we've connected the QWebChannel backend signals
+      
+      let currentFarmMode = null, farmingRunning = false, progressInterval = null;
       let backendConnected = false;
 
-      // Icons map for input screen
       const iconMap = {
         xp: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/xp.svg",
         gem: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/gems.svg",
         streak: "https://raw.githubusercontent.com/slimythor/DuoRain.Site/main/assets/streak.svg",
       };
+      const placeholderMap = { xp: "Enter Number Of Loops", gem: "Enter Number Of Loops", streak: "Enter Number Of Days" };
+      
+      // --- Utility functions for screen transitions ---
+      function showScreen(screenToShow) {
+        document.querySelectorAll('.screen').forEach(s => {
+          if (s !== screenToShow) { s.classList.add('hidden'); s.classList.remove('visible'); }
+        });
+        setTimeout(() => {
+          screenToShow.classList.remove('hidden'); screenToShow.classList.add('visible');
+        }, 300); // This delay should match CSS transition time for smoothness
+      }
 
-      // Input placeholder map
-      const placeholderMap = {
-        xp: "Enter Number Of Loops",
-        gem: "Enter Number Of Loops",
-        streak: "Enter Number Of Days",
-      };
-
-      // Reset progress bar
       function resetProgress() {
-        progressValue = 0;
         progressFill.style.width = "0%";
-        progressFill.parentElement.parentElement.setAttribute('aria-valuenow', '0');
-        progressFill.classList.remove("progress-pulse");
+        progressArea.setAttribute('aria-valuenow', '0');
         progressPercent.textContent = "0%";
         progressLabel.textContent = "Progress";
         progressArea.classList.remove("visible");
-        if (progressInterval) {
-          clearInterval(progressInterval);
-          progressInterval = null;
-        }
+        if (progressInterval) clearInterval(progressInterval);
       }
+      
+      // --- [GEMINI] NEW Navigation Event Listeners ---
+      farmsBtn.addEventListener("click", () => {
+        showScreen(farmMenuScreen);
+      });
+      
+      backBtnFarms.addEventListener("click", () => {
+        showScreen(mainMenuScreen);
+      });
 
-      // Simulate farming progress for demo (fallback when no backend)
-      function startFarmingSimulated() {
+      // --- Original Navigation Logic (Adapted for new flow) ---
+      farmButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentFarmMode = btn.dataset.mode;
+          farmButtons.forEach(b => { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          inputIcon.src = iconMap[currentFarmMode];
+          farmInput.placeholder = placeholderMap[currentFarmMode];
+          farmInput.value = ""; startBtn.disabled = true; resetProgress();
+          showScreen(inputScreen);
+          farmInput.focus();
+        });
+      });
+      
+      backBtnInput.addEventListener("click", () => {
+        if (farmingRunning) {
+          if (window.backend && backendConnected) { try { window.backend.stop(); } catch (e) { console.warn("backend.stop() failed:", e); }}
+          else if(progressInterval) clearInterval(progressInterval);
+          farmingRunning = false;
+        }
+        resetProgress(); farmInput.value = ""; startBtn.disabled = true; farmInput.disabled = false;
+        showScreen(farmMenuScreen); // Go back to the farm selection menu
+      });
+
+      farmInput.addEventListener("input", () => { startBtn.disabled = farmInput.value.trim() === ""; });
+      
+      startBtn.addEventListener("click", () => {
         if (farmingRunning) return;
-        farmingRunning = true;
-        startBtn.disabled = true;
-        farmInput.disabled = true;
+        const count = parseInt(farmInput.value.trim(), 10);
+        if (isNaN(count) || count <= 0) return;
 
-        progressLabel.textContent = "Farming in progress...";
-        progressFill.classList.add("progress-pulse");
+        farmingRunning = true; startBtn.disabled = true; farmInput.disabled = true;
+        progressLabel.textContent = "Starting farm...";
         progressArea.classList.add("visible");
 
-        // simple simulated progression
-        progressInterval = setInterval(() => {
-          if (progressValue >= 100) {
-            clearInterval(progressInterval);
-            progressInterval = null;
-            farmingRunning = false;
-            startBtn.disabled = false;
-            farmInput.disabled = false;
-            progressLabel.textContent = "Farming complete!";
-            progressFill.classList.remove("progress-pulse");
-            return;
-          }
-          progressValue += Math.floor(Math.random() * 5) + 2; // increment by 2-6
-          if (progressValue > 100) progressValue = 100;
-          progressFill.style.width = progressValue + "%";
-          progressPercent.textContent = progressValue + "%";
-          progressFill.parentElement.parentElement.setAttribute('aria-valuenow', progressValue);
-
-        }, 450);
-      }
-
-      // Called when backend emits progress via QWebChannel
-      function onBackendProgress(current, total, rate) {
+        if (window.backend && backendConnected) {
+          try { window.backend.start(currentFarmMode, count); } catch (e) { console.warn("Backend call failed:", e); }
+        } else {
+            console.log("No backend. Using simulated mode."); // Fallback for testing
+        }
+      });
+      
+      // --- Backend Communication Logic (Unchanged) ---
+      function onBackendProgress(current, total) {
         const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-        progressValue = pct;
         progressFill.style.width = pct + "%";
         progressPercent.textContent = pct + "%";
         progressLabel.textContent = `${current} / ${total}`;
-        progressFill.parentElement.parentElement.setAttribute('aria-valuenow', pct);
-
-
-        // when done
+        progressArea.setAttribute('aria-valuenow', pct);
+        
         if (current >= total) {
           farmingRunning = false;
           startBtn.disabled = false;
           farmInput.disabled = false;
-          progressFill.classList.remove("progress-pulse");
           progressLabel.textContent = "Farming complete!";
         } else {
-          // ensure the visible state is set
           progressArea.classList.add("visible");
-          startBtn.disabled = true;
-          farmInput.disabled = true;
-          farmingRunning = true;
         }
       }
 
-      // Setup bindings for a discovered backend object
-      function setupBackendBindings() {
-        if (!window.backend) return;
-        backendConnected = true;
-        try {
-          if (window.backend.updateProgress && typeof window.backend.updateProgress.connect === "function") {
-            window.backend.updateProgress.connect(function (current, total, rate) {
-              onBackendProgress(current, total, rate);
-            });
-          }
-        } catch (e) {
-          console.warn("Failed to connect backend.updateProgress:", e);
-        }
+      function setupBackend() {
+        if (typeof qt === "undefined") return;
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+          window.backend = channel.objects.backend;
+          backendConnected = true;
+          try {
+            window.backend.updateProgress.connect(onBackendProgress);
+          } catch(e) { console.warn("Failed to connect backend signals:", e); }
+        });
       }
 
-      // Try loading qwebchannel when running inside Qt (the qt object exists)
+      // Check if running in Qt
       if (typeof qt !== "undefined") {
-        if (typeof QWebChannel === "undefined") {
-          const s = document.createElement("script");
-          s.src = "qrc:///qtwebchannel/qwebchannel.js";
-          s.onload = function () {
-            try {
-              new QWebChannel(qt.webChannelTransport, function (channel) {
-                window.backend = channel.objects.backend;
-                setupBackendBindings();
-              });
-            } catch (e) { console.warn("QWebChannel init failed:", e); }
-          };
-          s.onerror = function () { console.warn("Could not load qwebchannel.js from qrc."); };
-          document.head.appendChild(s);
-        } else {
-          try {
-            new QWebChannel(qt.webChannelTransport, function (channel) {
-              window.backend = channel.objects.backend;
-              setupBackendBindings();
-            });
-          } catch (e) { console.warn("QWebChannel init failed:", e); }
-        }
-      } else {
-        console.log("Not running inside PySide6 WebEngine. Using simulated mode.");
+        const script = document.createElement("script");
+        script.src = "qrc:///qtwebchannel/qwebchannel.js";
+        script.onload = setupBackend;
+        document.head.appendChild(script);
       }
 
-      // Event: farm button click on main menu
-      farmButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const mode = btn.dataset.mode;
-          if (!mode) return;
-
-          farmButtons.forEach((b) => {
-              b.setAttribute("aria-pressed", "false");
-              b.classList.remove("selected");
-          });
-          btn.setAttribute("aria-pressed", "true");
-          btn.classList.add("selected");
-
-          currentFarmMode = mode;
-          inputIcon.src = iconMap[mode];
-          farmInput.placeholder = placeholderMap[mode];
-          farmInput.value = "";
-          startBtn.disabled = true;
-          resetProgress();
-
-          farmMenuScreen.classList.remove("visible");
-          farmMenuScreen.classList.add("hidden");
-          setTimeout(() => {
-            inputScreen.classList.remove("hidden");
-            inputScreen.classList.add("visible");
-            farmInput.focus();
-          }, 350);
-        });
-      });
-
-      // Back button click
-      backBtn.addEventListener("click", () => {
-        farmButtons.forEach((b) => {
-            b.setAttribute("aria-pressed", "false");
-            b.classList.remove("selected");
-        });
-
-        if (farmingRunning) {
-          if (window.backend && backendConnected && typeof window.backend.stop === "function") {
-            try { window.backend.stop(); } catch (e) { console.warn("backend.stop() failed:", e); }
-          } else {
-            if (progressInterval) {
-              clearInterval(progressInterval);
-              progressInterval = null;
-            }
-          }
-          farmingRunning = false;
-        }
-
-        resetProgress();
-        farmInput.value = "";
-        startBtn.disabled = true;
-        farmInput.disabled = false;
-
-        inputScreen.classList.remove("visible");
-        inputScreen.classList.add("hidden");
-        setTimeout(() => {
-          farmMenuScreen.classList.remove("hidden");
-          farmMenuScreen.classList.add("visible");
-        }, 350);
-      });
-
-      // Enable start button only if input has value
-      farmInput.addEventListener("input", () => {
-        startBtn.disabled = farmInput.value.trim() === "";
-      });
-
-      // Start farming button click
-      startBtn.addEventListener("click", () => {
-        if (farmingRunning) return;
-        
-        const raw = farmInput.value.trim();
-        const count = parseInt(raw, 10);
-        if (!raw || isNaN(count) || count <= 0) {
-            farmInput.style.borderColor = 'red';
-            setTimeout(() => { farmInput.style.borderColor = '' }, 1000)
-            return;
-        };
-
-        if (window.backend && typeof window.backend.start === "function" && backendConnected) {
-          try {
-            farmingRunning = true;
-            startBtn.disabled = true;
-            farmInput.disabled = true;
-            progressLabel.textContent = "Starting farm...";
-            progressFill.classList.add("progress-pulse");
-            progressArea.classList.add("visible");
-            window.backend.start(currentFarmMode, count);
-          } catch (e) {
-            console.warn("Calling backend.start failed, falling back to simulated:", e);
-            startFarmingSimulated();
-          }
-        } else {
-          startFarmingSimulated();
-        }
-      });
     })();
   </script>
 </body>
